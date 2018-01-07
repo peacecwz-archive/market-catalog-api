@@ -31,19 +31,19 @@ namespace AktuelListesi.API.Controllers
         {
             if (!id.HasValue) return BadRequest();
 
-            var company = aktuelService.GetAktuel(id.Value);
-            if (company == null) return NotFound();
+            var aktuel = aktuelService.GetAktuel(id.Value);
+            if (aktuel == null) return NotFound();
 
-            return Ok(company);
+            return Ok(aktuel);
         }
 
         // POST api/aktuels
         [HttpPost]
-        public IActionResult Post([FromBody]AktuelDto company)
+        public IActionResult Post([FromBody]AktuelDto aktuel)
         {
-            if (ModelState.IsValid && aktuelService.AddAktuel(company) != null)
+            if (ModelState.IsValid && aktuelService.AddAktuel(aktuel) != null)
             {
-                return Ok(company);
+                return Ok(aktuel);
             }
 
             return BadRequest();
@@ -51,16 +51,16 @@ namespace AktuelListesi.API.Controllers
 
         // PUT api/aktuels/5
         [HttpPut("{id}")]
-        public IActionResult Put(int? id, [FromBody]AktuelDto company)
+        public IActionResult Put(int? id, [FromBody]AktuelDto aktuel)
         {
             if (!id.HasValue) return BadRequest();
 
-            var comp = aktuelService.GetAktuel(id.Value);
-            if (comp == null) return NotFound();
-
-            if (ModelState.IsValid && aktuelService.UpdateAktuel(id.Value, company) != null)
+            var akt = aktuelService.GetAktuel(id.Value);
+            if (akt == null) return NotFound();
+            aktuel.Id = akt.Id;
+            if (ModelState.IsValid && aktuelService.UpdateAktuel(aktuel) != null)
             {
-                return Ok(company);
+                return Ok(aktuel);
             }
 
             return BadRequest();
@@ -72,8 +72,8 @@ namespace AktuelListesi.API.Controllers
         {
             if (!id.HasValue) return BadRequest();
 
-            var company = aktuelService.GetAktuel(id.Value);
-            if (company == null) return NotFound();
+            var aktuel = aktuelService.GetAktuel(id.Value);
+            if (aktuel == null) return NotFound();
 
             bool isSuccess = (isSoftDelete) ?
                                 aktuelService.SoftDeleteAktuel(id.Value) :
