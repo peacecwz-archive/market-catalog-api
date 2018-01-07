@@ -30,7 +30,7 @@ namespace AktuelListesi.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<AktuelDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection")));
+            services.AddDbContext<AktuelDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection"), opt => opt.MigrationsAssembly("AktuelListesi.API")));
             services.AddAutoMapper();
 
             services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
