@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AktuelListesi.Crawler;
+using AktuelListesi.Crawler.Interfaces;
 using AktuelListesi.Repository;
 using AktuelListesi.Service;
 using AktuelListesi.Service.Implementations;
@@ -38,6 +40,8 @@ namespace AktuelListesi.API
             services.AddTransient<IAktuelPageService, AktuelPageService>();
             services.AddTransient<IAktuelService, AktuelService>();
             services.AddTransient<ICompanyService, CompanyService>();
+
+            services.AddTransient<ICrawlerService,CrawlerService>();
 
             services.AddSwaggerGen(c =>
             {

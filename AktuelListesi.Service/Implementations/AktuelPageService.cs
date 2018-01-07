@@ -8,10 +8,10 @@ using System.Text;
 
 namespace AktuelListesi.Service.Implementations
 {
-    public class AktuelPagePageService : IAktuelPageService
+    public class AktuelPageService : IAktuelPageService
     {
         private readonly IRepository<AktuelPage, AktuelPageDto> repository;
-        public AktuelPagePageService(IRepository<AktuelPage, AktuelPageDto> repository)
+        public AktuelPageService(IRepository<AktuelPage, AktuelPageDto> repository)
         {
             this.repository = repository;
         }
