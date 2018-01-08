@@ -6,6 +6,10 @@ namespace AktuelListesi.Data.Dtos
 {
     public class CompanyDto : BaseDto<int>
     {
+        /// <summary>
+        /// It's for crawler
+        /// </summary>
+        public int CategoryId { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         

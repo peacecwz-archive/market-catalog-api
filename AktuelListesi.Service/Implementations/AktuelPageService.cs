@@ -18,7 +18,7 @@ namespace AktuelListesi.Service.Implementations
 
         public AktuelPageDto AddAktuelPage(AktuelPageDto dto)
         {
-            if (repository.Add(dto))
+            if (repository.Add(dto) != null)
                 return dto;
             return null;
         }
@@ -35,19 +35,27 @@ namespace AktuelListesi.Service.Implementations
 
         public bool HardDeleteAktuelPage(int Id)
         {
-            return repository.Delete<int>(GetAktuelPage(Id), isSoftDelete: false);
+            return repository.Delete<int>(GetAktuelPage(Id), isSoftDelete: false) != null;
         }
 
         public bool SoftDeleteAktuelPage(int Id)
         {
-            return repository.Delete<int>(GetAktuelPage(Id), isSoftDelete: true);
+            return repository.Delete<int>(GetAktuelPage(Id), isSoftDelete: true) != null;
         }
 
         public AktuelPageDto UpdateAktuelPage(AktuelPageDto dto)
         {
-            if (repository.Update(dto))
+            if (repository.Update(dto) != null)
                 return dto;
             return null;
+        }
+
+        public AktuelPageDto AddOrGetAktuelPage(AktuelPageDto dto)
+        {
+            var aktuelPage = repository.First(x => x.PageImageUrl == dto.PageImageUrl);
+            if (aktuelPage == null) return ((dto = repository.Add(dto)) != null) ? dto : null;
+
+            return aktuelPage;
         }
     }
 }

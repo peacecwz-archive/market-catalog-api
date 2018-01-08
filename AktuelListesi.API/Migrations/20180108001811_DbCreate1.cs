@@ -9,12 +9,17 @@ namespace AktuelListesi.API.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:PostgresExtension:pg_buffercache", "'pg_buffercache', '', ''")
+                .Annotation("Npgsql:PostgresExtension:pg_stat_statements", "'pg_stat_statements', '', ''");
+
             migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CategoryId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ImageUrl = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
@@ -33,11 +38,13 @@ namespace AktuelListesi.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    ComapnyId = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
+                    ImageUrl = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    NewsId = table.Column<int>(nullable: false),
                     ReleasedDate = table.Column<string>(nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: true)
                 },
@@ -49,7 +56,7 @@ namespace AktuelListesi.API.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

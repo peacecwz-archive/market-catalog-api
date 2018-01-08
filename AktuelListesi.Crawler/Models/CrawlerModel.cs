@@ -9,7 +9,7 @@ namespace AktuelListesi.Crawler.Models
     public class CrawlerItem
     {
         [JsonProperty("cid")]
-        public string CompanyId { get; set; }
+        public string CategoryId { get; set; }
         [JsonProperty("category_name")]
         public string CategoryName { get; set; }
         [JsonProperty("category_image")]
@@ -21,7 +21,7 @@ namespace AktuelListesi.Crawler.Models
         [JsonProperty("news_heading")]
         public string NewsHeading { get; set; }
         [JsonProperty("cat_id")]
-        public string CategoryId { get; set; }
+        public string NewsCategoryId { get; set; }
         [JsonProperty("news_status")]
         public string NewsStatus { get; set; }
         [JsonProperty("news_date")]
@@ -36,6 +36,7 @@ namespace AktuelListesi.Crawler.Models
             get{
                 return _NewsDescription;
             } set{
+                if (Links == null) Links = new List<string>();
                 _NewsDescription = value;
                 if (!string.IsNullOrEmpty(value))
                 {

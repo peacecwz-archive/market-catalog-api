@@ -10,6 +10,7 @@ namespace AktuelListesi.Service
         IEnumerable<AktuelPageDto> GetAktuelPages();
         AktuelPageDto GetAktuelPage(int Id);
         AktuelPageDto AddAktuelPage(AktuelPageDto dto);
+        AktuelPageDto AddOrGetAktuelPage(AktuelPageDto dto);
         AktuelPageDto UpdateAktuelPage(AktuelPageDto dto);
         bool SoftDeleteAktuelPage(int Id);
         bool HardDeleteAktuelPage(int Id);

@@ -10,6 +10,7 @@ namespace AktuelListesi.Service
         IEnumerable<CompanyDto> GetCompanies();
         CompanyDto GetCompany(int Id);
         CompanyDto AddCompany(CompanyDto dto);
+        CompanyDto AddOrGetCompany(CompanyDto dto);
         CompanyDto UpdateCompany(CompanyDto dto);
         bool SoftDeleteCompany(int Id);
         bool HardDeleteCompany(int Id);

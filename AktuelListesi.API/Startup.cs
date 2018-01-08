@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AktuelListesi.AppService;
+using AktuelListesi.AppService.Interfaces;
 using AktuelListesi.Crawler;
 using AktuelListesi.Crawler.Interfaces;
 using AktuelListesi.Repository;
@@ -32,16 +34,27 @@ namespace AktuelListesi.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<AktuelDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection"), opt => opt.MigrationsAssembly("AktuelListesi.API")));
-            services.AddAutoMapper();
+            services.AddDbContext<AktuelDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection"), opt => opt.MigrationsAssembly("AktuelListesi.API")), contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton);
 
-            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
 
-            services.AddTransient<IAktuelPageService, AktuelPageService>();
-            services.AddTransient<IAktuelService, AktuelService>();
-            services.AddTransient<ICompanyService, CompanyService>();
+            var mapper = config.CreateMapper();
+            services.AddSingleton<IMapper>(mapper);
 
-            services.AddTransient<ICrawlerService,CrawlerService>();
+
+            services.AddSingleton(typeof(IRepository<,>), typeof(Repository<,>));
+
+            services.AddSingleton<IAktuelPageService, AktuelPageService>();
+            services.AddSingleton<IAktuelService, AktuelService>();
+            services.AddSingleton<ICompanyService, CompanyService>();
+
+            services.AddSingleton<ICrawlerService, CrawlerService>();
+            services.AddSingleton<IOneSignalService, OneSignalService>();
+            services.AddSingleton<IUploadService, UploadService>();
+            services.AddSingleton<IQueueService, QueueService>();
 
             services.AddSwaggerGen(c =>
             {

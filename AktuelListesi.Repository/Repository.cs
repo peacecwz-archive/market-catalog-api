@@ -189,28 +189,38 @@ namespace AktuelListesi.Repository
 
         #region Execution
 
-        public bool Add(TDto entity)
+        public TDto Add(TDto entity)
         {
-            Table.Add(mapper.Map<TDto, T>(entity));
-            return Save();
+            var obj = mapper.Map<TDto, T>(entity);
+            Table.Add(obj);
+            bool isSuccess = Save();
+            entity = mapper.Map<T, TDto>(obj);
+            return entity;
         }
 
-        public bool Update(TDto entity)
+        public TDto Update(TDto entity)
         {
-            dbContext.Entry<T>(mapper.Map<TDto, T>(entity)).State = EntityState.Modified;
-            return Save();
+            var obj = mapper.Map<TDto, T>(entity);
+
+            dbContext.Entry<T>(obj).State = EntityState.Modified;
+            bool isSuccess = Save();
+            entity = mapper.Map<T, TDto>(obj);
+            return entity;
         }
 
-        public bool Delete<TProperty>(TDto entity, bool isSoftDelete = true)
+        public TDto Delete<TProperty>(TDto entity, bool isSoftDelete = true)
         {
+            var obj = mapper.Map<TDto, T>(entity);
             if (!isSoftDelete)
-                table.Remove(mapper.Map<TDto, T>(entity));
+                table.Remove(obj);
             else
             {
-                (entity as BaseEntity<TProperty>).IsDeleted = isSoftDelete;
-                dbContext.Entry<T>(mapper.Map<TDto, T>(entity)).State = EntityState.Modified;
+                (obj as BaseEntity<TProperty>).IsDeleted = isSoftDelete;
+                dbContext.Entry<T>(obj).State = EntityState.Modified;
             }
-            return Save();
+            bool isSuccess = Save();
+            entity = mapper.Map<T, TDto>(obj);
+            return entity;
         }
 
         public bool BeginTransaction()

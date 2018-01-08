@@ -17,9 +17,17 @@ namespace AktuelListesi.Service.Implementations
 
         public CompanyDto AddCompany(CompanyDto dto)
         {
-            if (repository.Add(dto))
+            if (repository.Add(dto) != null)
                 return dto;
             return null;
+        }
+
+        public CompanyDto AddOrGetCompany(CompanyDto dto)
+        {
+            var company = repository.First(x => x.Name == dto.Name | x.CategoryId == dto.CategoryId);
+            if (company == null) return (((dto = repository.Add(dto)) != null) ? dto : null);
+
+            return company;
         }
 
         public IEnumerable<CompanyDto> GetCompanies()
@@ -34,17 +42,17 @@ namespace AktuelListesi.Service.Implementations
 
         public bool HardDeleteCompany(int Id)
         {
-            return repository.Delete<int>(GetCompany(Id), isSoftDelete: false);
+            return repository.Delete<int>(GetCompany(Id), isSoftDelete: false) != null;
         }
 
         public bool SoftDeleteCompany(int Id)
         {
-            return repository.Delete<int>(GetCompany(Id), isSoftDelete: true);
+            return repository.Delete<int>(GetCompany(Id), isSoftDelete: true) != null;
         }
 
         public CompanyDto UpdateCompany(CompanyDto dto)
         {
-            if (repository.Update(dto))
+            if (repository.Update(dto) != null)
                 return dto;
             return null;
         }

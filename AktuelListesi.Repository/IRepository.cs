@@ -43,9 +43,9 @@ namespace AktuelListesi.Repository
         TDto Single(Expression<Func<T, bool>> single);
         IEnumerable<TDto> OrderBy<TKey>(Expression<Func<T, TKey>> orderBy, bool isDesc);
 
-        bool Add(TDto entity);
-        bool Update(TDto entity);
-        bool Delete<TProperty>(TDto entity, bool isSoftDelete = true);
+        TDto Add(TDto entity);
+        TDto Update(TDto entity);
+        TDto Delete<TProperty>(TDto entity, bool isSoftDelete = true);
         bool Save();
 
         bool BeginTransaction();

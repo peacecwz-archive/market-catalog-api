@@ -11,30 +11,37 @@ using System;
 namespace AktuelListesi.API.Migrations
 {
     [DbContext(typeof(AktuelDbContext))]
-    [Migration("20180107031204_DbCreate1")]
+    [Migration("20180108001811_DbCreate1")]
     partial class DbCreate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:PostgresExtension:pg_buffercache", "'pg_buffercache', '', ''")
+                .HasAnnotation("Npgsql:PostgresExtension:pg_stat_statements", "'pg_stat_statements', '', ''")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("AktuelListesi.Data.Tables.Aktuel", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
-                    b.Property<int>("ComapnyId");
-
-                    b.Property<int?>("CompanyId");
+                    b.Property<int>("CompanyId");
 
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("ImageUrl");
 
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("NewsId");
 
                     b.Property<string>("ReleasedDate");
 
@@ -50,7 +57,8 @@ namespace AktuelListesi.API.Migrations
             modelBuilder.Entity("AktuelListesi.Data.Tables.AktuelPage", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<int>("AktuelId");
 
@@ -76,7 +84,10 @@ namespace AktuelListesi.API.Migrations
             modelBuilder.Entity("AktuelListesi.Data.Tables.Company", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+
+                    b.Property<int>("CategoryId");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -99,7 +110,8 @@ namespace AktuelListesi.API.Migrations
                 {
                     b.HasOne("AktuelListesi.Data.Tables.Company", "Company")
                         .WithMany("Aktuels")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AktuelListesi.Data.Tables.AktuelPage", b =>

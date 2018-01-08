@@ -4,6 +4,7 @@ using AktuelListesi.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace AktuelListesi.Service.Implementations
 {
@@ -17,7 +18,7 @@ namespace AktuelListesi.Service.Implementations
 
         public AktuelDto AddAktuel(AktuelDto dto)
         {
-            if (repository.Add(dto))
+            if (repository.Add(dto) != null)
                 return dto;
             return null;
         }
@@ -34,19 +35,32 @@ namespace AktuelListesi.Service.Implementations
 
         public bool HardDeleteAktuel(int Id)
         {
-            return repository.Delete<int>(GetAktuel(Id), isSoftDelete: false);
+            return repository.Delete<int>(GetAktuel(Id), isSoftDelete: false) != null;
         }
 
         public bool SoftDeleteAktuel(int Id)
         {
-            return repository.Delete<int>(GetAktuel(Id), isSoftDelete: true);
+            return repository.Delete<int>(GetAktuel(Id), isSoftDelete: true) != null;
         }
 
         public AktuelDto UpdateAktuel(AktuelDto dto)
         {
-            if (repository.Update(dto))
+            if (repository.Update(dto) != null)
                 return dto;
             return null;
+        }
+
+        public AktuelDto AddOrGetAktuel(AktuelDto dto)
+        {
+            var aktuel = repository.First(x => x.NewsId == dto.NewsId & x.CompanyId == dto.CompanyId);
+            if (aktuel == null) return ((dto = repository.Add(dto)) != null) ? dto : null;
+
+            return aktuel;
+        }
+
+        public IEnumerable<AktuelDto> GetLatestAktuels()
+        {
+            return repository.WhereActives<int>(x => x.IsLatest).OrderByDescending(x => x.NewsId);
         }
     }
 }

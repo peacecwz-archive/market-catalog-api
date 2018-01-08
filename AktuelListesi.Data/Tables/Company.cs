@@ -6,6 +6,10 @@ namespace AktuelListesi.Data.Tables
 {
     public class Company :BaseEntity<int>
     {
+        /// <summary>
+        /// It's for Crawler
+        /// </summary>
+        public int CategoryId { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
 
