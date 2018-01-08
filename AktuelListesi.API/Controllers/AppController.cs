@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AktuelListesi.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class AppController : ApiController
     {
         private readonly IAktuelPageService aktuelPageService;
