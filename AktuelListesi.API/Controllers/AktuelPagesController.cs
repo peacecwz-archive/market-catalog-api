@@ -10,10 +10,10 @@ namespace AktuelListesi.API.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/[controller]")]
-    public class AktuelPagePagesController : ApiController
+    public class AktuelPagesController : ApiController
     {
         private readonly IAktuelPageService aktuelPageService;
-        public AktuelPagePagesController(IAktuelPageService aktuelPageService)
+        public AktuelPagesController(IAktuelPageService aktuelPageService)
         {
             this.aktuelPageService = aktuelPageService;
         }
