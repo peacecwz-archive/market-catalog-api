@@ -14,7 +14,7 @@ namespace AktuelListesi.API.Controllers
     {
         private readonly IAktuelPageService aktuelPageService;
         public AktuelPagesController(IAktuelPageService aktuelPageService)
-        {
+        {  
             this.aktuelPageService = aktuelPageService;
         }
 
