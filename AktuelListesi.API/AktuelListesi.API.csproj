@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AktuelListesi.AppService\AktuelListesi.AppService.csproj" />
+    <ProjectReference Include="..\AktuelListesi.Models\AktuelListesi.Models.csproj" />
     <ProjectReference Include="..\AktuelListesi.Repository\AktuelListesi.Repository.csproj" />
     <ProjectReference Include="..\AktuelListesi.Service\AktuelListesi.Service.csproj" />
     <ProjectReference Include="..\AktuelListesi.Crawler\AktuelListesi.Crawler.csproj" />

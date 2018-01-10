@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AktuelListesi.AppService.Interfaces;
 using AktuelListesi.Crawler.Interfaces;
+using AktuelListesi.Models.App;
 using AktuelListesi.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,10 @@ namespace AktuelListesi.API.Controllers
         [HttpGet("latest")]
         public IActionResult Latest()
         {
-            return Ok(aktuelService.GetLatestAktuels());
+            var model = new LatestModel();
+            model.Aktuels = aktuelService.GetLatestAktuels();
+            model.Companies = companyService.GetCompanies();
+            return Ok(model);
         }
 
         [HttpGet("update")]
