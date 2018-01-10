@@ -38,7 +38,7 @@ namespace AktuelListesi.API.Controllers
             if (aktuel == null) return NotFound();
 
             var aktuelPages = aktuelPageService.GetAktuelPagesByAktuelId(aktuel.Id);
-            if (aktuelPages != null && aktuelPages.Count() > 0) Ok(aktuelPages);
+            if (aktuelPages != null && aktuelPages.Count() > 0) return Ok(aktuelPages);
 
             return NotFound();
         }
