@@ -8,6 +8,7 @@ namespace AktuelListesi.Service
     public interface IAktuelPageService
     {
         IEnumerable<AktuelPageDto> GetAktuelPages();
+        IEnumerable<AktuelPageDto> GetAktuelPagesByAktuelId(int AktuelId);
         AktuelPageDto GetAktuelPage(int Id);
         AktuelPageDto AddAktuelPage(AktuelPageDto dto);
         AktuelPageDto AddOrGetAktuelPage(AktuelPageDto dto);

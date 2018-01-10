@@ -57,5 +57,10 @@ namespace AktuelListesi.Service.Implementations
 
             return aktuelPage;
         }
+
+        public IEnumerable<AktuelPageDto> GetAktuelPagesByAktuelId(int AktuelId)
+        {
+            return repository.Where(x => x.AktuelId == AktuelId);
+        }
     }
 }

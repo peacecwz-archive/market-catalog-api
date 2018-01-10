@@ -18,14 +18,14 @@ namespace AktuelListesi.API.Controllers
             this.aktuelPageService = aktuelPageService;
         }
 
-        // GET api/aktuelPages
+        // GET api/v1/aktuelPages
         [HttpGet]
         public IActionResult Get()
         {
             return Ok(aktuelPageService.GetAktuelPages());
         }
-
-        // GET api/aktuelPages/5
+        
+        // GET api/v1/aktuelPages/5
         [HttpGet("{id}")]
         public IActionResult Get(int? id)
         {
@@ -37,7 +37,7 @@ namespace AktuelListesi.API.Controllers
             return Ok(aktuelPage);
         }
 
-        // POST api/aktuelPages
+        // POST api/v1/aktuelPages
         [HttpPost]
         public IActionResult Post([FromBody]AktuelPageDto aktuelPage)
         {
@@ -49,7 +49,7 @@ namespace AktuelListesi.API.Controllers
             return BadRequest();
         }
 
-        // PUT api/aktuelPages/5
+        // PUT api/v1/aktuelPages/5
         [HttpPut("{id}")]
         public IActionResult Put(int? id, [FromBody]AktuelPageDto aktuelPage)
         {
@@ -66,7 +66,7 @@ namespace AktuelListesi.API.Controllers
             return BadRequest();
         }
 
-        // DELETE api/aktuelPages/5
+        // DELETE api/v1/aktuelPages/5
         [HttpDelete("{id}/{isSoftDelete}")]
         public IActionResult Delete(int? id, bool isSoftDelete = true)
         {

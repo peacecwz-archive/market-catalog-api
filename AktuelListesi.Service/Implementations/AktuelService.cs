@@ -62,5 +62,10 @@ namespace AktuelListesi.Service.Implementations
         {
             return repository.WhereActives<int>(x => x.IsLatest).OrderByDescending(x => x.NewsId);
         }
+
+        public IEnumerable<AktuelDto> GetAktuelsByCompanyId(int CompanyId)
+        {
+            return repository.Where(x => x.CompanyId == CompanyId);
+        }
     }
 }

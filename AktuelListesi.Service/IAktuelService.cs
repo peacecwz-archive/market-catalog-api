@@ -9,6 +9,7 @@ namespace AktuelListesi.Service
     {
         IEnumerable<AktuelDto> GetLatestAktuels();
         IEnumerable<AktuelDto> GetAktuels();
+        IEnumerable<AktuelDto> GetAktuelsByCompanyId(int CompanyId);
         AktuelDto GetAktuel(int Id);
         AktuelDto AddAktuel(AktuelDto dto);
         AktuelDto AddOrGetAktuel(AktuelDto dto);

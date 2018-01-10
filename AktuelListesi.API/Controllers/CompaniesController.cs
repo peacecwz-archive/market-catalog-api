@@ -13,19 +13,37 @@ namespace AktuelListesi.API.Controllers
     public class CompaniesController : ApiController
     {
         private readonly ICompanyService companyService;
-        public CompaniesController(ICompanyService companyService)
+        private readonly IAktuelService aktuelService;
+        public CompaniesController(ICompanyService companyService,
+                                   IAktuelService aktuelService)
         {
             this.companyService = companyService;
+            this.aktuelService = aktuelService;
         }
 
-        // GET api/companies
+        // GET api/v1/companies
         [HttpGet]
         public IActionResult Get()
         {
             return Ok(companyService.GetCompanies());
         }
 
-        // GET api/companies/5
+        // GET api/v1/companies/5/aktuels
+        [HttpGet("{id}/aktuels")]
+        public IActionResult GetAktuels(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+
+            var company = companyService.GetCompany(id.Value);
+            if (company == null) return NotFound();
+
+            var aktuels = aktuelService.GetAktuelsByCompanyId(company.Id);
+            if (aktuels != null && aktuels.Count() > 0) return Ok(aktuels);
+
+            return NotFound();
+        }
+
+        // GET api/v1/companies/5
         [HttpGet("{id}")]
         public IActionResult Get(int? id)
         {
@@ -37,7 +55,7 @@ namespace AktuelListesi.API.Controllers
             return Ok(company);
         }
 
-        // POST api/companies
+        // POST api/v1/companies
         [HttpPost]
         public IActionResult Post([FromBody]CompanyDto company)
         {
@@ -49,7 +67,7 @@ namespace AktuelListesi.API.Controllers
             return BadRequest();
         }
 
-        // PUT api/companies/5
+        // PUT api/v1/companies/5
         [HttpPut("{id}")]
         public IActionResult Put(int? id, [FromBody]CompanyDto company)
         {
@@ -67,7 +85,7 @@ namespace AktuelListesi.API.Controllers
             return BadRequest();
         }
 
-        // DELETE api/companies/5
+        // DELETE api/v1/companies/5
         [HttpDelete("{id}/{isSoftDelete}")]
         public IActionResult Delete(int? id, bool isSoftDelete = true)
         {
