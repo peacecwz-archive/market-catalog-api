@@ -33,8 +33,9 @@ namespace AktuelListesi.AppService
                 requestTask.Wait();
                 var responseTask = requestTask.Result.Content.ReadAsStreamAsync();
                 responseTask.Wait();
-
+                if(requestTask.Result.IsSuccessStatusCode)
                 return UploadFile(responseTask.Result, "");
+                return fileUrl;
             }
         }
 
@@ -58,7 +59,9 @@ namespace AktuelListesi.AppService
                 var blobContainer = blobClient.GetContainerReference(StorageOptions.ContainerName);
                 blobContainer.CreateIfNotExistsAsync().Wait();
                 var blobRef = blobContainer.GetBlockBlobReference(GenerateFileNmae(url));
+                blobRef.Properties.ContentType = "image/jpg";
                 blobRef.UploadFromStreamAsync(stream).Wait();
+                
                 return blobRef.Uri.ToString();
             }
             catch

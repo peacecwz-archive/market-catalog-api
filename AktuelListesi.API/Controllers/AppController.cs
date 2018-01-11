@@ -52,13 +52,13 @@ namespace AktuelListesi.API.Controllers
             aktuelService.DeactiveLatestAktuels();
             foreach (var latestItem in latestItems)
             {
+
                 var companyDto = companyService.AddOrGetCompany(new Data.Dtos.CompanyDto()
                 {
                     Name = latestItem.CategoryName,
-                    //ImageUrl = latestItem.CategoryImage,
+                    ImageUrl = uploadService.UploadFile("http://aktuel-urunlerim.com/aktuel1/upload/" + latestItem.NewsImage),
                     CategoryId = int.Parse(latestItem.CategoryId),
-                    IsActive = true,
-                    CreatedAt = DateTime.Now
+                    IsActive = true
                 });
 
                 var aktuelDto = aktuelService.AddOrGetAktuel(new Data.Dtos.AktuelDto()
@@ -73,11 +73,6 @@ namespace AktuelListesi.API.Controllers
                     CreatedAt = DateTime.Now
                 });
 
-                if (string.IsNullOrEmpty(companyDto.ImageUrl))
-                {
-                    companyDto.ImageUrl = uploadService.UploadFile("http://aktuel-urunlerim.com/aktuel1/upload/" + latestItem.NewsImage);
-                    companyService.UpdateCompany(companyDto);
-                }
 
                 if (!aktuelDto.IsLatest)
                 {
