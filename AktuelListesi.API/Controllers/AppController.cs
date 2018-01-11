@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AktuelListesi.AppService.Interfaces;
 using AktuelListesi.Crawler.Interfaces;
 using AktuelListesi.Models.App;
-using AktuelListesi.Service;
+using AktuelListesi.DataService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +47,7 @@ namespace AktuelListesi.API.Controllers
         public IActionResult Update()
         {
             var latestItems = crawlerService.GetLatest();
+            aktuelService.DeactiveLatestAktuels();
             foreach (var latestItem in latestItems)
             {
                 var companyDto = companyService.AddOrGetCompany(new Data.Dtos.CompanyDto()
@@ -57,7 +58,7 @@ namespace AktuelListesi.API.Controllers
                     IsActive = true,
                     CreatedAt = DateTime.Now
                 });
-
+                
                 var aktuelDto = aktuelService.AddOrGetAktuel(new Data.Dtos.AktuelDto()
                 {
                     Name = latestItem.NewsHeading,
@@ -68,6 +69,11 @@ namespace AktuelListesi.API.Controllers
                     IsActive = true,
                     IsLatest = true
                 });
+                if (!aktuelDto.IsLatest)
+                {
+                    aktuelDto.IsLatest = true;
+                    aktuelService.UpdateAktuel(aktuelDto);
+                }
 
                 foreach (var page in latestItem.Links)
                 {
@@ -87,7 +93,6 @@ namespace AktuelListesi.API.Controllers
         {
             Task.Run(() =>
             {
-
                 var companies = crawlerService.GetCompanies();
                 foreach (var company in companies)
                 {

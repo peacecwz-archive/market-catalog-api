@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace AktuelListesi.Service.Implementations
+namespace AktuelListesi.DataService.Implementations
 {
     public class AktuelService : IAktuelService
     {
@@ -66,6 +66,24 @@ namespace AktuelListesi.Service.Implementations
         public IEnumerable<AktuelDto> GetAktuelsByCompanyId(int CompanyId)
         {
             return repository.Where(x => x.CompanyId == CompanyId);
+        }
+
+        public bool DeactiveLatestAktuels()
+        {
+            try
+            {
+                var latestAktuels = GetLatestAktuels();
+                foreach (var aktuel in latestAktuels)
+                {
+                    aktuel.IsLatest = false;
+                    repository.Update(aktuel);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

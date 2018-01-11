@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AktuelListesi.Data.Dtos;
-using AktuelListesi.Service;
+using AktuelListesi.DataService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AktuelListesi.API.Controllers
@@ -56,6 +57,7 @@ namespace AktuelListesi.API.Controllers
         }
 
         // POST api/v1/aktuels
+        [Authorize]
         [HttpPost]
         public IActionResult Post([FromBody]AktuelDto aktuel)
         {
@@ -68,6 +70,7 @@ namespace AktuelListesi.API.Controllers
         }
 
         // PUT api/v1/aktuels/5
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int? id, [FromBody]AktuelDto aktuel)
         {
@@ -85,6 +88,7 @@ namespace AktuelListesi.API.Controllers
         }
 
         // DELETE api/v1/aktuels/5
+        [Authorize]
         [HttpDelete("{id}/{isSoftDelete}")]
         public IActionResult Delete(int? id, bool isSoftDelete = true)
         {

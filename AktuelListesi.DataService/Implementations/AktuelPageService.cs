@@ -1,12 +1,12 @@
 ﻿using AktuelListesi.Data.Dtos;
 using AktuelListesi.Data.Tables;
 using AktuelListesi.Repository;
-using AktuelListesi.Service;
+using AktuelListesi.DataService;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AktuelListesi.Service.Implementations
+namespace AktuelListesi.DataService.Implementations
 {
     public class AktuelPageService : IAktuelPageService
     {

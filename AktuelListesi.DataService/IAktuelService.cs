@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AktuelListesi.Service
+namespace AktuelListesi.DataService
 {
     public interface IAktuelService
     {
@@ -16,6 +16,6 @@ namespace AktuelListesi.Service
         AktuelDto UpdateAktuel(AktuelDto dto);
         bool SoftDeleteAktuel(int Id);
         bool HardDeleteAktuel(int Id);
-
+        bool DeactiveLatestAktuels();
     }
 }

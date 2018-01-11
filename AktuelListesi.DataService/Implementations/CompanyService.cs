@@ -5,7 +5,7 @@ using AktuelListesi.Data.Dtos;
 using AktuelListesi.Data.Tables;
 using AktuelListesi.Repository;
 
-namespace AktuelListesi.Service.Implementations
+namespace AktuelListesi.DataService.Implementations
 {
     public class CompanyService : ICompanyService
     {

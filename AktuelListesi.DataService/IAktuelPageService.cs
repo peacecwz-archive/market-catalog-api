@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AktuelListesi.Service
+namespace AktuelListesi.DataService
 {
     public interface IAktuelPageService
     {
