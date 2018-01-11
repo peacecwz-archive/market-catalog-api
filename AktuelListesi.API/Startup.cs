@@ -43,6 +43,14 @@ namespace AktuelListesi.API
                 options.Language = Configuration["CognitiveService:Language"];
             });
 
+            services.Configure<AzureStorageOptions>(options =>
+            {
+                options.ConnectionString = Configuration["AzureStorage:ConnectionString"];
+                options.QueueName = Configuration["AzureStorage:QueueName"];
+                options.ContainerName = Configuration["AzureStorage:ContainerName"];
+
+            });
+
             #endregion
 
             #region DbContext & Mapper

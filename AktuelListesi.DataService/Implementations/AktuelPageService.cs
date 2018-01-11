@@ -52,7 +52,7 @@ namespace AktuelListesi.DataService.Implementations
 
         public AktuelPageDto AddOrGetAktuelPage(AktuelPageDto dto)
         {
-            var aktuelPage = repository.First(x => x.PageImageUrl == dto.PageImageUrl);
+            var aktuelPage = repository.First(x => x.AktuelId == dto.AktuelId & x.OriginalImageUrl == dto.OriginalImageUrl);
             if (aktuelPage == null) return ((dto = repository.Add(dto)) != null) ? dto : null;
 
             return aktuelPage;

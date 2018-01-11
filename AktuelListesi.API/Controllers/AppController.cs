@@ -20,18 +20,20 @@ namespace AktuelListesi.API.Controllers
         private readonly ICompanyService companyService;
         private readonly IQueueService queueService;
         private readonly ICrawlerService crawlerService;
-
+        private readonly IUploadService uploadService;
         public AppController(IAktuelPageService aktuelPageService,
                              IAktuelService aktuelService,
                              ICompanyService companyService,
                              IQueueService queueService,
-                             ICrawlerService crawlerService)
+                             ICrawlerService crawlerService,
+                             IUploadService uploadService)
         {
             this.aktuelPageService = aktuelPageService;
             this.aktuelService = aktuelService;
             this.companyService = companyService;
             this.queueService = queueService;
             this.crawlerService = crawlerService;
+            this.uploadService = uploadService;
         }
 
         [HttpGet("latest")]
@@ -53,22 +55,30 @@ namespace AktuelListesi.API.Controllers
                 var companyDto = companyService.AddOrGetCompany(new Data.Dtos.CompanyDto()
                 {
                     Name = latestItem.CategoryName,
-                    ImageUrl = latestItem.CategoryImage,
+                    //ImageUrl = latestItem.CategoryImage,
                     CategoryId = int.Parse(latestItem.CategoryId),
                     IsActive = true,
                     CreatedAt = DateTime.Now
                 });
-                
+
                 var aktuelDto = aktuelService.AddOrGetAktuel(new Data.Dtos.AktuelDto()
                 {
                     Name = latestItem.NewsHeading,
-                    ImageUrl = latestItem.NewsImage,
+                    ImageUrl = companyDto.ImageUrl,
                     CompanyId = companyDto.Id,
                     NewsId = int.Parse(latestItem.NewsId),
                     ReleasedDate = latestItem.NewsDate,
                     IsActive = true,
-                    IsLatest = true
+                    IsLatest = true,
+                    CreatedAt = DateTime.Now
                 });
+
+                if (string.IsNullOrEmpty(companyDto.ImageUrl))
+                {
+                    companyDto.ImageUrl = uploadService.UploadFile("http://aktuel-urunlerim.com/aktuel1/upload/" + latestItem.NewsImage);
+                    companyService.UpdateCompany(companyDto);
+                }
+
                 if (!aktuelDto.IsLatest)
                 {
                     aktuelDto.IsLatest = true;
@@ -80,8 +90,10 @@ namespace AktuelListesi.API.Controllers
                     aktuelPageService.AddOrGetAktuelPage(new Data.Dtos.AktuelPageDto()
                     {
                         AktuelId = aktuelDto.Id,
-                        PageImageUrl = page,
-                        IsActive = true
+                        PageImageUrl = uploadService.UploadFile(page),
+                        OriginalImageUrl = page,
+                        IsActive = true,
+                        CreatedAt = DateTime.Now
                     });
                 }
             }
@@ -96,21 +108,22 @@ namespace AktuelListesi.API.Controllers
                 var companies = crawlerService.GetCompanies();
                 foreach (var company in companies)
                 {
-                    var companyDto = companyService.AddOrGetCompany(new Data.Dtos.CompanyDto()
-                    {
-                        Name = company.CategoryName,
-                        ImageUrl = company.CategoryImage,
-                        CategoryId = int.Parse(company.CategoryId),
-                        IsActive = true
-                    });
-
                     var aktuelNewsItems = crawlerService.GetAktuelPages(company.CategoryId);
                     foreach (var aktuelNews in aktuelNewsItems)
                     {
+                        var companyDto = companyService.AddOrGetCompany(new Data.Dtos.CompanyDto()
+                        {
+                            Name = company.CategoryName,
+                            ImageUrl = uploadService.UploadFile("http://aktuel-urunlerim.com/aktuel1/upload/" + aktuelNews.NewsImage),
+                            CategoryId = int.Parse(company.CategoryId),
+                            IsActive = true
+                        });
+
                         var aktuelDto = aktuelService.AddOrGetAktuel(new Data.Dtos.AktuelDto()
                         {
                             Name = aktuelNews.NewsHeading,
-                            ImageUrl = aktuelNews.NewsImage,
+                            ImageUrl = companyDto.ImageUrl,
+                            OriginalImageUrl = "http://aktuel-urunlerim.com/aktuel1/upload/" + aktuelNews.NewsImage,
                             CompanyId = companyDto.Id,
                             NewsId = int.Parse(aktuelNews.NewsId),
                             ReleasedDate = aktuelNews.NewsDate,
@@ -118,13 +131,17 @@ namespace AktuelListesi.API.Controllers
                             IsLatest = true
                         });
 
+
+
+
                         foreach (var page in aktuelNews.Links)
                         {
                             aktuelPageService.AddOrGetAktuelPage(new Data.Dtos.AktuelPageDto()
                             {
                                 AktuelId = aktuelDto.Id,
-                                PageImageUrl = page,
-                                IsActive = true
+                                PageImageUrl = uploadService.UploadFile(page),
+                                IsActive = true,
+                                OriginalImageUrl = page
                             });
                         }
                     }

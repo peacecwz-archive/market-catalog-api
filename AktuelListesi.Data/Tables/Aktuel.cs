@@ -8,6 +8,7 @@ namespace AktuelListesi.Data.Tables
     {
         public string Name { get; set; }
         public string ImageUrl { get; set; }
+        public string OriginalImageUrl { get; set; }
         public bool IsLatest { get; set; } = true;
         /// <summary>
         /// It's for Crawler

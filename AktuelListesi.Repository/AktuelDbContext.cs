@@ -42,10 +42,11 @@ namespace AktuelListesi.Repository
             modelBuilder.Entity<AktuelPage>(entity =>
             {
                 entity.HasKey(x => x.Id);
-
+                
                 entity.Property(x => x.Id)
                     .ValueGeneratedOnAdd()
                     .UseNpgsqlSerialColumn();
+
             });
         }
     }

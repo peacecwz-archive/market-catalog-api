@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AktuelListesi.AppService
 {
-    public class QueueService : IQueueService
+    public class QueueService : IQueueService, IDisposable
     {
         public AzureStorageOptions StorageOptions { get; set; }
         public QueueService(IOptions<AzureStorageOptions> storageOptions)
@@ -23,6 +23,11 @@ namespace AktuelListesi.AppService
 
         public QueueService() { }
 
+        ~QueueService()
+        {
+            Dispose();
+        }
+
         public bool AddQueue(string message)
         {
             try
@@ -35,9 +40,17 @@ namespace AktuelListesi.AppService
 
                 queueRef.AddMessageAsync(new Microsoft.WindowsAzure.Storage.Queue.CloudQueueMessage(message)).Wait();
 
+                GC.SuppressFinalize(queueRef);
+                GC.SuppressFinalize(queueClient);
+                GC.SuppressFinalize(storage);
                 return true;
             }
             catch { return false; }
+        }
+
+        public void Dispose()
+        {
+            GC.WaitForPendingFinalizers();
         }
     }
 }

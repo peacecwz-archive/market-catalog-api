@@ -11,9 +11,10 @@ using System;
 namespace AktuelListesi.API.Migrations
 {
     [DbContext(typeof(AktuelDbContext))]
-    partial class AktuelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180111051814_DbCreate4")]
+    partial class DbCreate4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

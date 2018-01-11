@@ -11,9 +11,10 @@ using System;
 namespace AktuelListesi.API.Migrations
 {
     [DbContext(typeof(AktuelDbContext))]
-    partial class AktuelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180111044037_DbCreate3")]
+    partial class DbCreate3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,8 +44,6 @@ namespace AktuelListesi.API.Migrations
                     b.Property<string>("Name");
 
                     b.Property<int>("NewsId");
-
-                    b.Property<string>("OriginalImageUrl");
 
                     b.Property<string>("ReleasedDate");
 
