@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace AktuelListesi.AppService
 {
@@ -51,6 +52,32 @@ namespace AktuelListesi.AppService
         public void Dispose()
         {
             GC.WaitForPendingFinalizers();
+        }
+
+        public T GetNextQueueMessage<T>()
+        {
+            try
+            {
+                CloudStorageAccount storage = CloudStorageAccount.Parse(StorageOptions.ConnectionString);
+                var queueClient = storage.CreateCloudQueueClient();
+                var queueRef = queueClient.GetQueueReference(StorageOptions.QueueName);
+
+                queueRef.CreateIfNotExistsAsync().Wait();
+
+                var messageTask = queueRef.GetMessageAsync();
+                messageTask.Wait();
+                var message = messageTask.Result;
+
+                var obj = JsonConvert.DeserializeObject<T>(message.AsString);
+                queueRef.DeleteMessageAsync(message).Wait();
+
+                GC.SuppressFinalize(messageTask);
+                GC.SuppressFinalize(queueRef);
+                GC.SuppressFinalize(queueClient);
+                GC.SuppressFinalize(storage);
+                return obj;
+            }
+            catch { return default(T); }
         }
     }
 }

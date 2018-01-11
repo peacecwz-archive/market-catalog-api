@@ -25,22 +25,41 @@ namespace AktuelListesi.AppService
 
         public CognitiveService() { }
 
-        public CognitiveServiceModel ReadTextFromImage(string ImageUrl)
+        public string ReadTextFromImage(string ImageUrl)
         {
-            if (ServiceOptions == null) throw new Exception("Invalid Configuration");
-            using (HttpClient client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", ServiceOptions.ServiceKey);
-                using (StringContent content = new StringContent(JsonConvert.SerializeObject(new { url = ImageUrl }), Encoding.UTF8, "application/json"))
+                if (ServiceOptions == null) return "";
+                using (HttpClient client = new HttpClient())
                 {
-                    var requestTask = client.GetAsync($"{ServiceOptions.ServiceUrl}/ocr?language={ServiceOptions.Language}&detectOrientation=true");
-                    requestTask.Wait();
-                    var request = requestTask.Result;
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", ServiceOptions.ServiceKey);
+                    using (StringContent content = new StringContent(JsonConvert.SerializeObject(new { url = ImageUrl }), Encoding.UTF8, "application/json"))
+                    {
+                        var requestTask = client.GetAsync($"{ServiceOptions.ServiceUrl}/ocr?language={ServiceOptions.Language}&detectOrientation=true");
+                        requestTask.Wait();
+                        var request = requestTask.Result;
 
-                    var responseTask = request.Content.ReadAsStringAsync();
-                    responseTask.Wait();
-                    return JsonConvert.DeserializeObject<CognitiveServiceModel>(responseTask.Result);
+                        var responseTask = request.Content.ReadAsStringAsync();
+                        responseTask.Wait();
+                        var model = JsonConvert.DeserializeObject<CognitiveServiceModel>(responseTask.Result);
+                        string text = "";
+                        foreach (var region in model.Regions)
+                        {
+                            foreach (var line in region.Lines)
+                            {
+                                foreach (var word in line.Words)
+                                {
+                                    text += word.Text;
+                                }
+                            }
+                        }
+                        return text;
+                    }
                 }
+            }
+            catch
+            {
+                return "";
             }
         }
     }

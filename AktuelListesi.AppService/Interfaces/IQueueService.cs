@@ -9,5 +9,6 @@ namespace AktuelListesi.AppService.Interfaces
     {
         AzureStorageOptions StorageOptions { get; set; }
         bool AddQueue(string message);
+        T GetNextQueueMessage<T>();
     }
 }

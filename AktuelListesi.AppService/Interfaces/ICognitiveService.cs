@@ -9,6 +9,6 @@ namespace AktuelListesi.AppService.Interfaces
     public interface ICognitiveService
     {
         CognitiveServiceOptions ServiceOptions { get; set; }
-        CognitiveServiceModel ReadTextFromImage(string ImageUrl);
+        string ReadTextFromImage(string ImageUrl);
     }
 }

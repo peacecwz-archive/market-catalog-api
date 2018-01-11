@@ -8,6 +8,8 @@ using AktuelListesi.Models.App;
 using AktuelListesi.DataService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using AktuelListesi.Data.Dtos;
 
 namespace AktuelListesi.API.Controllers
 {
@@ -21,12 +23,14 @@ namespace AktuelListesi.API.Controllers
         private readonly IQueueService queueService;
         private readonly ICrawlerService crawlerService;
         private readonly IUploadService uploadService;
+        private readonly ICognitiveService cognitiveService;
         public AppController(IAktuelPageService aktuelPageService,
                              IAktuelService aktuelService,
                              ICompanyService companyService,
                              IQueueService queueService,
                              ICrawlerService crawlerService,
-                             IUploadService uploadService)
+                             IUploadService uploadService,
+                             ICognitiveService cognitiveService)
         {
             this.aktuelPageService = aktuelPageService;
             this.aktuelService = aktuelService;
@@ -34,6 +38,7 @@ namespace AktuelListesi.API.Controllers
             this.queueService = queueService;
             this.crawlerService = crawlerService;
             this.uploadService = uploadService;
+            this.cognitiveService = cognitiveService;
         }
 
         [HttpGet("latest")]
@@ -82,7 +87,7 @@ namespace AktuelListesi.API.Controllers
 
                 foreach (var page in latestItem.Links)
                 {
-                    aktuelPageService.AddOrGetAktuelPage(new Data.Dtos.AktuelPageDto()
+                    var aktuelPage = aktuelPageService.AddOrGetAktuelPage(new Data.Dtos.AktuelPageDto()
                     {
                         AktuelId = aktuelDto.Id,
                         PageImageUrl = uploadService.UploadFile(page),
@@ -90,6 +95,7 @@ namespace AktuelListesi.API.Controllers
                         IsActive = true,
                         CreatedAt = DateTime.Now
                     });
+                    queueService.AddQueue(JsonConvert.SerializeObject(aktuelPage));
                 }
             }
             return Ok();
@@ -145,6 +151,15 @@ namespace AktuelListesi.API.Controllers
             return Ok();
         }
 
-
+        [HttpPost("analyzeImage")]
+        public IActionResult AnalyzeImage(AktuelPageDto aktuelPageDto)
+        {
+            string content = cognitiveService.ReadTextFromImage(aktuelPageDto.PageImageUrl);
+            aktuelPageDto.Content = content;
+            if (aktuelPageService.UpdateAktuelPage(aktuelPageDto) != null)
+                return Ok();
+            return BadRequest();
+        }
+ 
     }
 }
