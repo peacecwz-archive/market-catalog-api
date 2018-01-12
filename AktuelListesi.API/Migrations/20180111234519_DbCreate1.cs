@@ -43,9 +43,12 @@ namespace AktuelListesi.API.Migrations
                     ImageUrl = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    IsLatest = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     NewsId = table.Column<int>(nullable: false),
-                    ReleasedDate = table.Column<string>(nullable: true),
+                    OriginalImageUrl = table.Column<string>(nullable: true),
+                    ReleasedDate = table.Column<DateTime>(nullable: false),
+                    ReleasedDateString = table.Column<string>(nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -70,6 +73,7 @@ namespace AktuelListesi.API.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    OriginalImageUrl = table.Column<string>(nullable: true),
                     PageImageUrl = table.Column<string>(nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: true)
                 },

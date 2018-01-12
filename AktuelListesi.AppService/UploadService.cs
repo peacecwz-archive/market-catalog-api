@@ -1,5 +1,6 @@
 ﻿using AktuelListesi.AppService.Interfaces;
 using AktuelListesi.Models.AppServices;
+using FreeImageAPI;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using System;
@@ -33,8 +34,8 @@ namespace AktuelListesi.AppService
                 requestTask.Wait();
                 var responseTask = requestTask.Result.Content.ReadAsStreamAsync();
                 responseTask.Wait();
-                if(requestTask.Result.IsSuccessStatusCode)
-                return UploadFile(responseTask.Result, "");
+                if (requestTask.Result.IsSuccessStatusCode)
+                    return UploadFile(responseTask.Result, "");
                 return fileUrl;
             }
         }
@@ -54,17 +55,26 @@ namespace AktuelListesi.AppService
         {
             try
             {
-                CloudStorageAccount storage = CloudStorageAccount.Parse(StorageOptions.ConnectionString);
-                var blobClient = storage.CreateCloudBlobClient();
-                var blobContainer = blobClient.GetContainerReference(StorageOptions.ContainerName);
-                blobContainer.CreateIfNotExistsAsync().Wait();
-                var blobRef = blobContainer.GetBlockBlobReference(GenerateFileNmae(url));
-                blobRef.Properties.ContentType = "image/jpg";
-                blobRef.UploadFromStreamAsync(stream).Wait();
-                
-                return blobRef.Uri.ToString();
+                using (var image = FreeImageBitmap.FromStream(stream))
+                {
+                    using (MemoryStream newStream = new MemoryStream())
+                    {
+                        image.Save(newStream, FREE_IMAGE_FORMAT.FIF_PNG, FREE_IMAGE_SAVE_FLAGS.PNG_Z_DEFAULT_COMPRESSION | FREE_IMAGE_SAVE_FLAGS.PNG_Z_BEST_SPEED);
+
+                        CloudStorageAccount storage = CloudStorageAccount.Parse(StorageOptions.ConnectionString);
+                        var blobClient = storage.CreateCloudBlobClient();
+                        var blobContainer = blobClient.GetContainerReference(StorageOptions.ContainerName);
+                        blobContainer.CreateIfNotExistsAsync().Wait();
+                        var blobRef = blobContainer.GetBlockBlobReference(GenerateFileNmae(url));
+                        blobRef.Properties.ContentType = "image/png";
+                        blobRef.UploadFromByteArrayAsync(newStream.GetBuffer(),0,newStream.GetBuffer().Length).Wait();
+
+
+                        return blobRef.Uri.ToString();
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
                 return "";
             }
@@ -75,7 +85,7 @@ namespace AktuelListesi.AppService
             try
             {
                 if (string.IsNullOrEmpty(url))
-                    return Guid.NewGuid() + ".jpg";
+                    return Guid.NewGuid() + ".png";
 
                 var uri = new Uri(url);
                 return Path.GetFileName(uri.LocalPath);

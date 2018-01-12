@@ -11,7 +11,7 @@ using System;
 namespace AktuelListesi.API.Migrations
 {
     [DbContext(typeof(AktuelDbContext))]
-    [Migration("20180108001811_DbCreate1")]
+    [Migration("20180111234519_DbCreate1")]
     partial class DbCreate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,11 +39,17 @@ namespace AktuelListesi.API.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<bool>("IsLatest");
+
                     b.Property<string>("Name");
 
                     b.Property<int>("NewsId");
 
-                    b.Property<string>("ReleasedDate");
+                    b.Property<string>("OriginalImageUrl");
+
+                    b.Property<DateTime>("ReleasedDate");
+
+                    b.Property<string>("ReleasedDateString");
 
                     b.Property<DateTime?>("UpdatedAt");
 
@@ -69,6 +75,8 @@ namespace AktuelListesi.API.Migrations
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("OriginalImageUrl");
 
                     b.Property<string>("PageImageUrl");
 

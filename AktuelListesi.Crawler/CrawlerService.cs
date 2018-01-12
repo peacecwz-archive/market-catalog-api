@@ -11,14 +11,14 @@ namespace AktuelListesi.Crawler
     {
         public List<CrawlerItem> GetAktuelPages(string categoryId)
         {
-            var model = GetModel($"http://aktuelurunara.com/aktuel/api.php?cat_id={categoryId}");
+            var model = GetModel($"http://aktuel-urunlerim.com/aktuel1/api.php?cat_id={categoryId}");
             if (model == null) return new List<CrawlerItem>();
             return model.CompanyItems;
         }
 
         public List<CrawlerItem> GetCompanies()
         {
-            var model = GetModel("http://aktuelurunara.com/aktuel/api.php");
+            var model = GetModel("http://aktuel-urunlerim.com/aktuel1/api.php");
 
             if (model == null) return new List<CrawlerItem>();
             return model.CompanyItems;
@@ -26,7 +26,7 @@ namespace AktuelListesi.Crawler
 
         public List<CrawlerItem> GetLatest()
         {
-            var model = GetModel("http://aktuelurunara.com/aktuel/api.php?latest_news=100");
+            var model = GetModel("http://aktuel-urunlerim.com/aktuel1/api.php?latest_news=100");
 
             if (model == null) return new List<CrawlerItem>();
             return model.CompanyItems;

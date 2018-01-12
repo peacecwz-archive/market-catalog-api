@@ -46,7 +46,9 @@ namespace AktuelListesi.API.Migrations
 
                     b.Property<string>("OriginalImageUrl");
 
-                    b.Property<string>("ReleasedDate");
+                    b.Property<DateTime>("ReleasedDate");
+
+                    b.Property<string>("ReleasedDateString");
 
                     b.Property<DateTime?>("UpdatedAt");
 

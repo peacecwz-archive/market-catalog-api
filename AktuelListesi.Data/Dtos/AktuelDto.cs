@@ -14,7 +14,8 @@ namespace AktuelListesi.Data.Dtos
         /// It's for Crawler
         /// </summary>
         public int NewsId { get; set; }
-        public string ReleasedDate { get; set; }
+        public DateTime ReleasedDate { get; set; }
+        public string ReleasedDateString { get; set; }
         public int CompanyId { get; set; }
     }
 }
