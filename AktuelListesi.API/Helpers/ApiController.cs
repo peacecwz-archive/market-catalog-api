@@ -8,5 +8,6 @@ namespace AktuelListesi.API
 {
     public class ApiController : Controller
     {
+        
     }
 }
