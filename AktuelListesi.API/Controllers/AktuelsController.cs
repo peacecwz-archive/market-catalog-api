@@ -56,6 +56,7 @@ namespace AktuelListesi.API.Controllers
             return Ok(aktuel);
         }
 
+        // GET api/v1/aktuels/search?query=
         [HttpGet("search")]
         public IActionResult search(string query)
         {
