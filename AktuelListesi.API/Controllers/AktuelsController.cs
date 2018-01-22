@@ -56,6 +56,17 @@ namespace AktuelListesi.API.Controllers
             return Ok(aktuel);
         }
 
+        [HttpGet("search")]
+        public IActionResult search(string query)
+        {
+            if (string.IsNullOrEmpty(query)) return BadRequest();
+
+            var aktuels = aktuelService.Search(query);
+            if (aktuels == null) return NotFound();
+
+            return Ok(aktuels);
+        }
+
         // POST api/v1/aktuels
         [Authorize]
         [HttpPost]

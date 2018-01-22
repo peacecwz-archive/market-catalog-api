@@ -23,7 +23,7 @@ namespace AktuelListesi.Repository
             this.table = this.dbContext.Set<T>();
         }
 
-
+        public IMapper Mapper => this.mapper;
         public DbContext Context => this.dbContext;
 
         public DbSet<T> Table { get => this.table; }

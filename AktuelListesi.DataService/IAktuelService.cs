@@ -10,6 +10,7 @@ namespace AktuelListesi.DataService
         IEnumerable<AktuelDto> GetLatestAktuels();
         IEnumerable<AktuelDto> GetAktuels();
         IEnumerable<AktuelDto> GetAktuelsByCompanyId(int CompanyId);
+        IEnumerable<AktuelDto> Search(string query);
         AktuelDto GetAktuel(int Id);
         AktuelDto AddAktuel(AktuelDto dto);
         AktuelDto AddOrGetAktuel(AktuelDto dto);

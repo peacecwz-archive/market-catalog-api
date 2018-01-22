@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using AutoMapper;
 
 namespace AktuelListesi.Repository
 {
     public interface IRepository<T, TDto> where T : class where TDto : class
     {
         DbSet<T> Table { get; }
+        IMapper Mapper { get; }
         bool IsExists<TProperty>(TProperty Id);
         bool IsConfirmDefault<TProperty>(T entity);
 

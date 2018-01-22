@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace AktuelListesi.DataService.Implementations
 {
@@ -84,6 +85,13 @@ namespace AktuelListesi.DataService.Implementations
             {
                 return false;
             }
+        }
+
+        public IEnumerable<AktuelDto> Search(string query)
+        {
+            return this.repository.Table.Include(x => x.AktuelPages)
+                                        .Where(x => x.AktuelPages.Any(y => y.Content.Contains(query)))
+                                        .Select(x => repository.Mapper.Map<Aktuel, AktuelDto>(x));
         }
     }
 }
