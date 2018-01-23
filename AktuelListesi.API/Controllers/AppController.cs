@@ -82,7 +82,7 @@ namespace AktuelListesi.API.Controllers
         }
 
         [HttpPost("analyzeImage")]
-        public IActionResult AnalyzeImage(AktuelPageDto aktuelPageDto)
+        public IActionResult AnalyzeImage([FromBody]AktuelPageDto aktuelPageDto)
         {
             string content = cognitiveService.ReadTextFromImage(aktuelPageDto.PageImageUrl);
             aktuelPageDto.Content = content;
