@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Diagnostics;
 
 namespace AktuelListesi.AppService
 {
@@ -76,6 +77,7 @@ namespace AktuelListesi.AppService
             }
             catch (Exception ex)
             {
+                Debug.Write(ex.Message);
                 return "";
             }
         }
@@ -90,8 +92,9 @@ namespace AktuelListesi.AppService
                 var uri = new Uri(url);
                 return Path.GetFileName(uri.LocalPath);
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.Write(ex.Message);
                 return Guid.NewGuid() + ".jpg";
             }
         }

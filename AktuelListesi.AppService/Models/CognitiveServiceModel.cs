@@ -11,7 +11,7 @@ namespace AktuelListesi.AppService.Models
         [JsonProperty("language")]
         public string Language { get; set; }
         [JsonProperty("textAngle")]
-        public int TextAngle { get; set; }
+        public string TextAngle { get; set; }
         [JsonProperty("orientation")]
         public string Orientation { get; set; }
         [JsonProperty("regions")]

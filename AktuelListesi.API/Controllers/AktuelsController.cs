@@ -62,7 +62,7 @@ namespace AktuelListesi.API.Controllers
         {
             if (string.IsNullOrEmpty(query)) return BadRequest();
 
-            var aktuels = aktuelService.Search(query);
+            var aktuels = aktuelService.Search(query.ToLower());
             if (aktuels == null) return NotFound();
 
             return Ok(aktuels);

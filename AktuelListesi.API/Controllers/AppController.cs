@@ -86,8 +86,9 @@ namespace AktuelListesi.API.Controllers
         {
             string content = cognitiveService.ReadTextFromImage(aktuelPageDto.PageImageUrl);
             aktuelPageDto.Content = content;
-            if (aktuelPageService.UpdateAktuelPage(aktuelPageDto) != null)
-                return Ok();
+            aktuelPageDto = aktuelPageService.UpdateAktuelPage(aktuelPageDto);
+            if (aktuelPageDto != null)
+                return Ok(aktuelPageDto);
             return BadRequest();
         }
 
@@ -103,7 +104,7 @@ namespace AktuelListesi.API.Controllers
                 IsActive = true
             });
 
-            DateTime relaseDate = DateTime.Now; 
+            DateTime relaseDate = DateTime.Now;
             DateTime.TryParse(latestItem.NewsDate, out relaseDate);
             var aktuelDto = aktuelService.AddOrGetAktuel(new Data.Dtos.AktuelDto()
             {

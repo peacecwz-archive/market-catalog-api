@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Diagnostics;
 
 namespace AktuelListesi.AppService
 {
@@ -35,7 +36,7 @@ namespace AktuelListesi.AppService
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", ServiceOptions.ServiceKey);
                     using (StringContent content = new StringContent(JsonConvert.SerializeObject(new { url = ImageUrl }), Encoding.UTF8, "application/json"))
                     {
-                        var requestTask = client.GetAsync($"{ServiceOptions.ServiceUrl}/ocr?language={ServiceOptions.Language}&detectOrientation=true");
+                        var requestTask = client.PostAsync($"{ServiceOptions.ServiceUrl}/ocr?language={ServiceOptions.Language}&detectOrientation=true", content);
                         requestTask.Wait();
                         var request = requestTask.Result;
 
@@ -53,14 +54,25 @@ namespace AktuelListesi.AppService
                                 }
                             }
                         }
-                        return text;
+                        return TextToLower(text.ToLower());
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.Write(ex.Message);
                 return "";
             }
+        }
+
+        private string TextToLower(string text)
+        {
+            return text.Replace("İ", "i")
+                       .Replace("Ö", "ö")
+                       .Replace("Ü", "ü")
+                       .Replace("I", "ı")
+                       .Replace("O", "o")
+                       .Replace("U", "u");
         }
     }
 }

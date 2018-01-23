@@ -201,7 +201,8 @@ namespace AktuelListesi.Repository
         public TDto Update(TDto entity)
         {
             var obj = mapper.Map<TDto, T>(entity);
-            Table.Update(obj);
+            Table.Attach(obj);
+            dbContext.Entry(obj).State = EntityState.Modified;
             bool isSuccess = Save();
             entity = mapper.Map<T, TDto>(obj);
             return entity;
