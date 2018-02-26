@@ -35,23 +35,23 @@ namespace AktuelListesi.Repository
 
         public IEnumerable<TDto> All()
         {
-            return Table.AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
         }
 
 
         public IEnumerable<TDto> AllByDefault<TProperty>()
         {
-            return Table.Where(x => (x as BaseEntity<TProperty>).IsActive & !(x as BaseEntity<TProperty>).IsDeleted).Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsActive & !(x as BaseEntity<TProperty>).IsDeleted).Select(x => mapper.Map<T, TDto>(x));
         }
 
         public IEnumerable<TDto> AllActives<TProperty>()
         {
-            return Table.Where(x => (x as BaseEntity<TProperty>).IsActive).Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsActive).Select(x => mapper.Map<T, TDto>(x));
         }
 
         public IEnumerable<TDto> AllDeleted<TProperty>()
         {
-            return Table.Where(x => (x as BaseEntity<TProperty>).IsDeleted).Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsDeleted).Select(x => mapper.Map<T, TDto>(x));
         }
 
 
@@ -62,15 +62,15 @@ namespace AktuelListesi.Repository
         public TDto First(Expression<Func<T, bool>> first = null)
         {
             if (first != null)
-                return mapper.Map<T, TDto>(table.FirstOrDefault(first));
-            return mapper.Map<T, TDto>(table.FirstOrDefault());
+                return mapper.Map<T, TDto>(Table.AsNoTracking().FirstOrDefault(first));
+            return mapper.Map<T, TDto>(Table.AsNoTracking().FirstOrDefault());
         }
 
         public TDto FirstWithDefault<TProperty>(Expression<Func<T, bool>> first = null)
         {
             if (first != null)
-                return mapper.Map<T, TDto>(table.Where(x => (x as BaseEntity<TProperty>).IsActive & !(x as BaseEntity<TProperty>).IsDeleted).FirstOrDefault(first));
-            return mapper.Map<T, TDto>(table.FirstOrDefault());
+                return mapper.Map<T, TDto>(Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsActive & !(x as BaseEntity<TProperty>).IsDeleted).FirstOrDefault(first));
+            return mapper.Map<T, TDto>(Table.AsNoTracking().FirstOrDefault());
         }
 
         #endregion
@@ -79,24 +79,24 @@ namespace AktuelListesi.Repository
 
         public IEnumerable<TDto> Where(Expression<Func<T, bool>> where)
         {
-            return Table.Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
         }
 
 
         public IEnumerable<TDto> WhereWithDefault<TProperty>(Expression<Func<T, bool>> where)
         {
-            return Table.Where(x => (x as BaseEntity<TProperty>).IsActive & !(x as BaseEntity<TProperty>).IsDeleted).Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsActive & !(x as BaseEntity<TProperty>).IsDeleted).Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
         }
 
 
         public IEnumerable<TDto> WhereActives<TProperty>(Expression<Func<T, bool>> where)
         {
-            return Table.Where(x => (x as BaseEntity<TProperty>).IsActive).Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsActive).Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
         }
 
         public IEnumerable<TDto> WhereDeleted<TProperty>(Expression<Func<T, bool>> where)
         {
-            return Table.Where(x => (x as BaseEntity<TProperty>).IsDeleted).Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().Where(x => (x as BaseEntity<TProperty>).IsDeleted).Where(where).AsEnumerable().Select(x => mapper.Map<T, TDto>(x));
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace AktuelListesi.Repository
 
         public TDto GetById<TProperty>(TProperty Id)
         {
-            return mapper.Map<T, TDto>(table.SingleOrDefault(x => (x as BaseEntity<TProperty>).Id.Equals(Id)));
+            return mapper.Map<T, TDto>(Table.AsNoTracking().SingleOrDefault(x => (x as BaseEntity<TProperty>).Id.Equals(Id)));
         }
 
 
@@ -116,8 +116,8 @@ namespace AktuelListesi.Repository
         public IEnumerable<TDto> OrderBy<TKey>(Expression<Func<T, TKey>> orderBy, bool isDesc)
         {
             if (isDesc)
-                return table.OrderByDescending(orderBy).Select(x => mapper.Map<T, TDto>(x));
-            return table.OrderBy(orderBy).Select(x => mapper.Map<T, TDto>(x));
+                return Table.AsNoTracking().OrderByDescending(orderBy).Select(x => mapper.Map<T, TDto>(x));
+            return Table.AsNoTracking().OrderBy(orderBy).Select(x => mapper.Map<T, TDto>(x));
         }
 
         #endregion
@@ -126,7 +126,7 @@ namespace AktuelListesi.Repository
 
         public TDto Single(Expression<Func<T, bool>> single)
         {
-            return mapper.Map<T, TDto>(table.SingleOrDefault(single));
+            return mapper.Map<T, TDto>(Table.AsNoTracking().SingleOrDefault(single));
         }
 
 
@@ -160,7 +160,7 @@ namespace AktuelListesi.Repository
         {
             IQueryable<T> query = null;
             if (where != null)
-                query = Table.Where(where);
+                query = Table.AsNoTracking().Where(where);
             if (orderBy != null && query != null)
                 query = (isDesc) ? query.OrderByDescending(orderBy) : query.OrderBy(orderBy);
             else
@@ -177,11 +177,12 @@ namespace AktuelListesi.Repository
 
         public bool IsExists<TProperty>(TProperty Id)
         {
-            return Table.Any(x => (x as BaseEntity<TProperty>).Id.Equals(Id));
+            return Table.AsNoTracking().Any(x => (x as BaseEntity<TProperty>).Id.Equals(Id));
         }
 
         public bool IsConfirmDefault<TProperty>(T entity)
         {
+            
             return (entity as BaseEntity<TProperty>).IsActive & !(entity as BaseEntity<TProperty>).IsDeleted;
         }
 
@@ -212,7 +213,7 @@ namespace AktuelListesi.Repository
         {
             var obj = mapper.Map<TDto, T>(entity);
             if (!isSoftDelete)
-                table.Remove(obj);
+                Table.Remove(obj);
             else
             {
                 (obj as BaseEntity<TProperty>).IsDeleted = isSoftDelete;

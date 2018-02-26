@@ -34,16 +34,23 @@ namespace AktuelListesi.Crawler
 
         private CrawlerModel GetModel(string url)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-                var requestTask = client.GetAsync(url);
-                requestTask.Wait();
-                var request = requestTask.Result;
-
-                var responseTask = request.Content.ReadAsStringAsync();
-                responseTask.Wait();
-                return JsonConvert.DeserializeObject<CrawlerModel>(responseTask.Result);
+                using (HttpClient client = new HttpClient())
+                { 
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+                    var requestTask = client.GetAsync(url);
+                    requestTask.Wait();
+                    var request = requestTask.Result;
+                    
+                    var responseTask = request.Content.ReadAsStringAsync();
+                    responseTask.Wait();
+                    return JsonConvert.DeserializeObject<CrawlerModel>(responseTask.Result);
+                }
+            }
+            catch
+            {
+                return new CrawlerModel();
             }
         }
     }

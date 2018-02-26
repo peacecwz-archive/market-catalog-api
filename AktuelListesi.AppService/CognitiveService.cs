@@ -33,6 +33,7 @@ namespace AktuelListesi.AppService
                 if (ServiceOptions == null) return "";
                 using (HttpClient client = new HttpClient())
                 {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type","application/json");
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", ServiceOptions.ServiceKey);
                     using (StringContent content = new StringContent(JsonConvert.SerializeObject(new { url = ImageUrl }), Encoding.UTF8, "application/json"))
                     {
