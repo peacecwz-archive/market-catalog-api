@@ -14,8 +14,8 @@ This project is API of Aktuel Listesi Mobile App. Developed by ASP.NET Core Web 
 First of all, you need to clone the project to your local machine
 
 ```
-git clone https://github.com/sinemhasircioglu/MusicDatabase-API.git
-cd MusicDatabase-API
+git clone https://github.com/peacecwz/aktuel-listesi.git
+cd aktuel-listesi
 ```
 
 ### Building
