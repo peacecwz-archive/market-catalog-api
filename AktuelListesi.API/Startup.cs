@@ -118,6 +118,8 @@ namespace AktuelListesi.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Aktuel Listesi V1");
             });
 
+            app.UseMiddleware<Middlewares.ExceptionMiddleware>();
+
             app.UseMvc();
         }
     }

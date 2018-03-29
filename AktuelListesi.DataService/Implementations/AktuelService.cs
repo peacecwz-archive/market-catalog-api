@@ -73,12 +73,11 @@ namespace AktuelListesi.DataService.Implementations
         {
             try
             {
-                var latestAktuels = GetLatestAktuels();
-                foreach (var aktuel in latestAktuels)
-                {
-                    aktuel.IsLatest = false;
-                    repository.Update(aktuel);
-                }
+                var latestAktuels = GetLatestAktuels()?.ToList();
+                latestAktuels?.ForEach(aktuel => aktuel.IsLatest = false);
+                
+                repository.UpdateRange(latestAktuels);
+
                 return true;
             }
             catch

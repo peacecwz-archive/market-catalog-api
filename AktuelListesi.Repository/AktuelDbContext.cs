@@ -9,7 +9,7 @@ namespace AktuelListesi.Repository
         public AktuelDbContext(DbContextOptions<AktuelDbContext> options)
             : base(options)
         {
-
+            this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public virtual DbSet<Company> Companies { get; set; }

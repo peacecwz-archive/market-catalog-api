@@ -47,6 +47,7 @@ namespace AktuelListesi.Repository
 
         TDto Add(TDto entity);
         TDto Update(TDto entity);
+        IEnumerable<TDto> UpdateRange(IEnumerable<TDto> dtos);
         TDto Delete<TProperty>(TDto entity, bool isSoftDelete = true);
         bool Save();
 

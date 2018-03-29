@@ -182,7 +182,7 @@ namespace AktuelListesi.Repository
 
         public bool IsConfirmDefault<TProperty>(T entity)
         {
-            
+
             return (entity as BaseEntity<TProperty>).IsActive & !(entity as BaseEntity<TProperty>).IsDeleted;
         }
 
@@ -202,7 +202,6 @@ namespace AktuelListesi.Repository
         public TDto Update(TDto entity)
         {
             var obj = mapper.Map<TDto, T>(entity);
-            Table.Attach(obj);
             dbContext.Entry(obj).State = EntityState.Modified;
             bool isSuccess = Save();
             entity = mapper.Map<T, TDto>(obj);
@@ -264,6 +263,15 @@ namespace AktuelListesi.Repository
                 //Logger.LogError(ex, (ex.InnerException != null) ? ex.InnerException.Message : "");
                 return false;
             }
+        }
+
+        public IEnumerable<TDto> UpdateRange(IEnumerable<TDto> dtos)
+        {
+            var entities = dtos.Select(dto => mapper.Map<TDto, T>(dto));
+            Table.UpdateRange(entities);
+            bool isSuccess = Save();
+            dtos = entities.Select(entity => mapper.Map<T, TDto>(entity));
+            return dtos;
         }
 
         #endregion
