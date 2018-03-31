@@ -3,7 +3,6 @@
 
 appsettings.Development.json
 *.publishprofile
-*/appsettings.json
 */*.publishprofile
 
 # User-specific files
