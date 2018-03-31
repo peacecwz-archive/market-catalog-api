@@ -1,0 +1,87 @@
+﻿@model AktuelListesi.Data.Dtos.AktuelDto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>AktuelDto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OriginalImageUrl" class="control-label"></label>
+                <input asp-for="OriginalImageUrl" class="form-control" />
+                <span asp-validation-for="OriginalImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsLatest" /> @Html.DisplayNameFor(model => model.IsLatest)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewsId" class="control-label"></label>
+                <input asp-for="NewsId" class="form-control" />
+                <span asp-validation-for="NewsId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleasedDate" class="control-label"></label>
+                <input asp-for="ReleasedDate" class="form-control" />
+                <span asp-validation-for="ReleasedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleasedDateString" class="control-label"></label>
+                <input asp-for="ReleasedDateString" class="form-control" />
+                <span asp-validation-for="ReleasedDateString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <input asp-for="CompanyId" class="form-control" />
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

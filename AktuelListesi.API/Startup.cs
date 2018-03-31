@@ -53,47 +53,11 @@ namespace AktuelListesi.API
 
             #endregion
 
-            #region DbContext & Mapper
+            services.AddRepositories(Configuration.GetConnectionString("AktuelDbConnection"));
 
-            services.AddDbContext<AktuelDbContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection"), opt => opt.MigrationsAssembly("AktuelListesi.API"));
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            }, contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton);
+            services.AddDataServices();
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new MappingProfile());
-            });
-
-            var mapper = config.CreateMapper();
-            services.AddSingleton<IMapper>(mapper);
-
-            #endregion
-
-            #region DI Repository Service
-
-            services.AddSingleton(typeof(IRepository<,>), typeof(Repository<,>));
-
-            #endregion
-
-            #region DI Data Service
-
-            services.AddSingleton<IAktuelPageService, AktuelPageService>();
-            services.AddSingleton<IAktuelService, AktuelService>();
-            services.AddSingleton<ICompanyService, CompanyService>();
-
-            #endregion
-
-            #region DI App Services
-
-            services.AddTransient<ICrawlerService, CrawlerService>();
-            services.AddTransient<IOneSignalService, OneSignalService>();
-            services.AddTransient<IUploadService, UploadService>();
-            services.AddTransient<IQueueService, QueueService>();
-            services.AddTransient<ICognitiveService, CognitiveService>();
-
-            #endregion
+            services.AddAppServices();
 
             #region Swagger
 

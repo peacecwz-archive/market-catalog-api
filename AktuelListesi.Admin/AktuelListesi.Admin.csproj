@@ -6,10 +6,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AktuelListesi.DataService\AktuelListesi.DataService.csproj" />
+    <ProjectReference Include="..\AktuelListesi.Data\AktuelListesi.Data.csproj" />
+    <ProjectReference Include="..\AktuelListesi.Repository\AktuelListesi.Repository.csproj" />
   </ItemGroup>
 
 </Project>

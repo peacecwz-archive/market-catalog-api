@@ -1,0 +1,139 @@
+﻿@model IEnumerable<AktuelListesi.Data.Dtos.AktuelDto>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ImageUrl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.OriginalImageUrl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsLatest)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.NewsId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ReleasedDate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ReleasedDateString)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CompanyId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Id)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsActive)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CreatedAt)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					<img height="50" width="50" src="@Html.DisplayFor(modelItem => item.ImageUrl)" />
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.OriginalImageUrl)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsLatest)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NewsId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ReleasedDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ReleasedDateString)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CompanyId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Id)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsActive)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedAt)
+				</td>
+				<td>
+					@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+					<a onclick="ChangeActiveStatus(@item.Id)">@((item.IsActive) ? "Devre Dışı Bırak" : "Aktif Et")</a> |
+					<a onclick="Delete(@item.Id)">Sil</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+@section styles{
+	<link href="~/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+}
+@section scripts{
+	<script src="~/assets/pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
+	<script>
+		$(".table").DataTable();
+		function Delete(id) {
+			if (confirm("Silmek istediğinizden emin misiniz?")) {
+				$.ajax({
+					url: '@Url.Action("Delete")',
+					data: 'id=' + id,
+					success: function(result) {
+						alert(result);
+						location.reload();
+					},
+					error: function() {
+						alert("Hata Oluştu");
+					}
+				});
+			}
+		}
+
+		function ChangeActiveStatus(id) {
+			if (confirm("Değiştirmek istediğinizden emin misiniz?")) {
+				$.ajax({
+					url: '@Url.Action("ChangeActiveStatus")',
+					data: 'id=' + id,
+					success: function(result) {
+						alert(result);
+						location.reload();
+					},
+					error: function() {
+						alert("Hata Oluştu");
+					}
+				});
+			}
+		}
+	</script>
+}

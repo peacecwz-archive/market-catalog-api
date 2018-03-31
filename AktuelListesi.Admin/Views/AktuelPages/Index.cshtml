@@ -1,0 +1,121 @@
+﻿@model IEnumerable<AktuelListesi.Data.Dtos.AktuelPageDto>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Content)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.PageImageUrl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.OriginalImageUrl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.AktuelId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Id)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsActive)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CreatedAt)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Content)
+				</td>
+				<td>
+					@if (!string.IsNullOrEmpty(item.PageImageUrl))
+					{
+						<img height="100" width="75" src="@Html.DisplayFor(modelItem => item.PageImageUrl)" />
+					}
+				</td>
+				<td>
+					@if (!string.IsNullOrEmpty(item.OriginalImageUrl))
+					{
+						<img height="100" width="75" src="@Html.DisplayFor(modelItem => item.OriginalImageUrl)" />
+					}
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.AktuelId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Id)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsActive)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedAt)
+				</td>
+				<td>
+					@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+					<a onclick="ChangeActiveStatus(@item.Id)">@((item.IsActive) ? "Devre Dışı Bırak" : "Aktif Et")</a> |
+					<a onclick="Delete(@item.Id)">Sil</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+@section styles{
+	<link href="~/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+}
+@section scripts{
+	<script src="~/assets/pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
+	<script>
+		$(".table").DataTable();
+		function Delete(id) {
+			if (confirm("Silmek istediğinizden emin misiniz?")) {
+				$.ajax({
+					url: '@Url.Action("Delete")',
+					data: 'id=' + id,
+					success: function(result) {
+						alert(result);
+						location.reload();
+					},
+					error: function() {
+						alert("Hata Oluştu");
+					}
+				});
+			}
+		}
+
+		function ChangeActiveStatus(id) {
+			if (confirm("Değiştirmek istediğinizden emin misiniz?")) {
+				$.ajax({
+					url: '@Url.Action("ChangeActiveStatus")',
+					data: 'id=' + id,
+					success: function(result) {
+						alert(result);
+						location.reload();
+					},
+					error: function() {
+						alert("Hata Oluştu");
+					}
+				});
+			}
+		}
+	</script>
+}
