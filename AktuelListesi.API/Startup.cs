@@ -55,7 +55,11 @@ namespace AktuelListesi.API
 
             #region DbContext & Mapper
 
-            services.AddDbContext<AktuelDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection"), opt => opt.MigrationsAssembly("AktuelListesi.API")), contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton);
+            services.AddDbContext<AktuelDbContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("AktuelDbConnection"), opt => opt.MigrationsAssembly("AktuelListesi.API"));
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            }, contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton);
 
             var config = new MapperConfiguration(cfg =>
             {

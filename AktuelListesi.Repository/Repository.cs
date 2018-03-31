@@ -182,7 +182,6 @@ namespace AktuelListesi.Repository
 
         public bool IsConfirmDefault<TProperty>(T entity)
         {
-
             return (entity as BaseEntity<TProperty>).IsActive & !(entity as BaseEntity<TProperty>).IsDeleted;
         }
 
@@ -202,7 +201,7 @@ namespace AktuelListesi.Repository
         public TDto Update(TDto entity)
         {
             var obj = mapper.Map<TDto, T>(entity);
-            dbContext.Entry(obj).State = EntityState.Modified;
+            dbContext.Update(obj);
             bool isSuccess = Save();
             entity = mapper.Map<T, TDto>(obj);
             return entity;
@@ -271,6 +270,15 @@ namespace AktuelListesi.Repository
             Table.UpdateRange(entities);
             bool isSuccess = Save();
             dtos = entities.Select(entity => mapper.Map<T, TDto>(entity));
+            return dtos;
+        }
+
+        public IEnumerable<TDto> AddRange(List<TDto> dtos)
+        {
+            var entities = dtos.Select(dto => mapper.Map<TDto, T>(dto));
+            Table.AddRange(entities);
+            bool isSuccess = Save();
+            dtos = entities.Select(entity => mapper.Map<T, TDto>(entity)).ToList();
             return dtos;
         }
 

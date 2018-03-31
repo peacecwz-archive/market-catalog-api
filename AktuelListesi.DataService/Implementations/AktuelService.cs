@@ -54,7 +54,7 @@ namespace AktuelListesi.DataService.Implementations
         public AktuelDto AddOrGetAktuel(AktuelDto dto)
         {
             var aktuel = repository.First(x => x.NewsId == dto.NewsId & x.CompanyId == dto.CompanyId);
-            if (aktuel == null) return ((dto = repository.Add(dto)) != null) ? dto : null;
+            if (aktuel == null) return ((dto = this.AddAktuel(dto)) != null) ? dto : null;
 
             return aktuel;
         }

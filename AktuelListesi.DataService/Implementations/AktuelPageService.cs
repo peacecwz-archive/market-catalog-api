@@ -5,6 +5,7 @@ using AktuelListesi.DataService;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace AktuelListesi.DataService.Implementations
 {
@@ -45,8 +46,13 @@ namespace AktuelListesi.DataService.Implementations
 
         public AktuelPageDto UpdateAktuelPage(AktuelPageDto dto)
         {
-            if (repository.Update(dto) != null)
-                return dto;
+            var orgDto = repository.Single(x => x.AktuelId == dto.AktuelId && x.PageImageUrl == dto.PageImageUrl);
+            if (orgDto != null)
+            {
+                dto.Id = orgDto.Id;
+                if (repository.Update(dto) != null)
+                    return dto;
+            }
             return null;
         }
 
@@ -56,6 +62,12 @@ namespace AktuelListesi.DataService.Implementations
             if (aktuelPage == null) return ((dto = repository.Add(dto)) != null) ? dto : null;
 
             return aktuelPage;
+        }
+
+        public void AddRange(List<AktuelPageDto> dtos)
+        {
+            dtos = dtos.Where(x => !repository.Table.Any(y => y.AktuelId == x.AktuelId && y.OriginalImageUrl == x.OriginalImageUrl)).ToList();
+            repository.AddRange(dtos);
         }
 
         public IEnumerable<AktuelPageDto> GetAktuelPagesByAktuelId(int AktuelId)

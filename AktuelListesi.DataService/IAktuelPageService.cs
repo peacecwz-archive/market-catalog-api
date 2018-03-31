@@ -12,6 +12,7 @@ namespace AktuelListesi.DataService
         AktuelPageDto GetAktuelPage(int Id);
         AktuelPageDto AddAktuelPage(AktuelPageDto dto);
         AktuelPageDto AddOrGetAktuelPage(AktuelPageDto dto);
+        void AddRange(List<AktuelPageDto> dtos);
         AktuelPageDto UpdateAktuelPage(AktuelPageDto dto);
         bool SoftDeleteAktuelPage(int Id);
         bool HardDeleteAktuelPage(int Id);

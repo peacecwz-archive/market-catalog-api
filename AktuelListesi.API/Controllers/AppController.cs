@@ -84,6 +84,7 @@ namespace AktuelListesi.API.Controllers
         [HttpPost("analyzeImage")]
         public IActionResult AnalyzeImage([FromBody]AktuelPageDto aktuelPageDto)
         {
+            aktuelPageDto.PageImageUrl = uploadService.UploadFile(aktuelPageDto.OriginalImageUrl);
             string content = cognitiveService.ReadTextFromImage(aktuelPageDto.PageImageUrl);
             aktuelPageDto.Content = content;
             aktuelPageDto = aktuelPageService.UpdateAktuelPage(aktuelPageDto);
@@ -125,19 +126,20 @@ namespace AktuelListesi.API.Controllers
                 aktuelService.UpdateAktuel(aktuelDto);
             }
 
+            List<AktuelPageDto> aktuelPageDtos = new List<AktuelPageDto>();
             foreach (var page in latestItem.Links)
             {
-                var aktuelPage = aktuelPageService.AddOrGetAktuelPage(new Data.Dtos.AktuelPageDto()
+                var aktuelPage = new Data.Dtos.AktuelPageDto()
                 {
                     AktuelId = aktuelDto.Id,
-                    PageImageUrl = uploadService.UploadFile(page),
                     OriginalImageUrl = page,
                     IsActive = true,
                     CreatedAt = DateTime.Now
-                });
-                if (string.IsNullOrEmpty(aktuelPage.Content))
-                    queueService.AddQueue(JsonConvert.SerializeObject(aktuelPage));
+                };
+                aktuelPageDtos.Add(aktuelPage);
             }
+            aktuelPageService.AddRange(aktuelPageDtos);
+            aktuelPageDtos.Where(x => string.IsNullOrEmpty(x.Content)).ToList().ForEach(x => queueService.AddQueue(JsonConvert.SerializeObject(x)));
         }
 
         #endregion

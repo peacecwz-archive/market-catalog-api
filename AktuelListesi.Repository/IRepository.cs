@@ -46,6 +46,7 @@ namespace AktuelListesi.Repository
         IEnumerable<TDto> OrderBy<TKey>(Expression<Func<T, TKey>> orderBy, bool isDesc);
 
         TDto Add(TDto entity);
+        IEnumerable<TDto> AddRange(List<TDto> dtos);
         TDto Update(TDto entity);
         IEnumerable<TDto> UpdateRange(IEnumerable<TDto> dtos);
         TDto Delete<TProperty>(TDto entity, bool isSoftDelete = true);
